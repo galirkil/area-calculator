@@ -30,7 +30,7 @@ class FigureMeasurement:
 
     def __set__(self, instance, value):
         if not isinstance(value, (int, float)):
-            raise ValueError("Only args of int or float type are accepted!")
+            raise TypeError("Only args of int or float type are accepted!")
         elif value <= 0:
             raise ValueError("Figure measurement must be positive!")
         else:
@@ -73,7 +73,7 @@ class Triangle(Figure):
         elif len(sides) == 3:
             self.side1, self.side2, self.side3 = sides
         else:
-            raise ValueError(
+            raise TypeError(
                 "Triangle requires either one or three side's lengths!"
             )
 

@@ -25,7 +25,7 @@ class TestCircle(unittest.TestCase):
         self.assertEqual(self.circle.radius, 5)
 
     def test_radius_setter_invalid_data_type(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.circle.radius = "some string"
 
     def test_radius_setter_invalid_value(self):
@@ -47,7 +47,7 @@ class TestTriangleInit(unittest.TestCase):
         self.assertEqual(triangle.side3, SIDE3)
 
     def test_init_with_two_arguments(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             triangle = Triangle(SIDE1, SIDE2)
 
 
@@ -70,7 +70,7 @@ class TestTriangle(unittest.TestCase):
         self.assertEqual(self.triangle.side1, 6)
 
     def test_side_setter_invalid_data_type(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             self.triangle.side1 = "some string"
 
     def test_side_setter_invalid_value(self):
