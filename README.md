@@ -1,2 +1,79 @@
 # area-calculator
-Python module that calculates area for different shapes(mainly for circle and trianle).
+
+Простой Python пакет, который умеет вычислять площадь круга по радиусу и
+площадь треугольника по трем сторонам.
+
+### Дополнительные возможности
+
+- Легкость добавления других фигур.
+- Вычисление площади фигуры без знания типа фигуры в compile-time.
+- Проверка является ли треугольник прямоугольным.
+
+## Требования
+- Python >= 3.11
+
+## Использование
+
+Клонируйте репозиторий:
+
+```bash
+git clone git@github.com:galirkil/area-calculator.git
+```
+
+Поместите Python пакет `area_calculator` в рабочую директорию вашего проекта.
+
+Для вычисления площади фигуры импортируйте соответсвующий класс
+(доступные классы - `Triangle`, `Circle`) и функцию `calc_area()`.
+
+Для вычисления площади фигуры можно использовать как встроенный метод
+класса фигуры: `.area()` так и функцию `calc_area()` путем передачи в неё объекта
+соответствующего класса: `calc_area(some_figure_class_obj)`.
+
+Примеры:
+
+```python
+from area_calculator.figures import Triangle, Circle
+from area_calculator.utils import calc_area
+
+# создаем объект класса Circle, передаем значение радиуса в см
+circle = Circle(5)
+
+# создаем объект класса Triangle, передаем значение длины сторон в см
+# можно передать как одно значение(все стороны будут равны) 
+triangle = Triangle(3)
+
+# так и три значения по одному для каждой из сторон
+right_triangle = Triangle(3, 4, 5)
+
+# получаем значение площади для круга
+print(circle.area()) # Вывод: 78.54
+
+# получаем значение площади для треугольника
+print(triangle.area()) # Вывод: 3.9
+
+# для класса Triangle реализована проверка на прямоугольность
+triangle.is_right_triangle # Вывод False
+right_triangle.is_right_triangle # Вывод True
+
+# используем функцию calc_area() для получения площади любой фигуры
+print(calc_area(circle)) # Вывод: 78.54
+print(calc_area(triangle)) # Вывод: 3.9
+```
+
+## Добавление новых фигур
+
+1. Создайте соответствующий класс наследуясь от class `Figure`
+из `area_calculator.figures`. 
+
+2. В созданном классе добавьте реализацию метода`area()`.
+
+Для атрибутов класса представляющих измерения фигуры можно использовать
+соответствующий дескриптор `FigureMeasurement`из `area_calculator.figures`.
+Дескриптор проверяет тип и значение передаваемых в атрибут
+данных(`arg: int, float`, `arg > 0`).
+
+## Запуск тестов
+
+```bash
+python3 -m unittest area_calculator/tests.py
+```
