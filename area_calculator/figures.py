@@ -4,7 +4,7 @@ from math import pi, sqrt
 
 class Figure(ABC):
     """
-    All classes for certain figures must be sublassed
+    All classes for certain figures must be subclassed
     from this base class.
     """
 
@@ -62,7 +62,7 @@ class Circle(Figure):
     """
     radius = FigureMeasurement()
 
-    def __init__(self, radius):
+    def __init__(self, radius: int | float):
         self.radius = radius
 
     def __str__(self):
@@ -98,7 +98,7 @@ class Triangle(Figure):
         return f"Triangle with sides {self.side1} cm, {self.side2} cm, " \
                f"{self.side3} cm."
 
-    def is_valid_triangle(self):
+    def is_valid_triangle(self) -> bool:
         a = getattr(self, "side1")
         b = getattr(self, "side2")
         c = getattr(self, "side3")
