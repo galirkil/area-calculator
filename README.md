@@ -52,8 +52,8 @@ print(circle.area()) # Вывод: 78.54
 print(triangle.area()) # Вывод: 3.9
 
 # для класса Triangle реализована проверка на прямоугольность
-triangle.is_right_triangle # Вывод False
-right_triangle.is_right_triangle # Вывод True
+triangle.is_right_triangle # Вывод: False
+right_triangle.is_right_triangle # Вывод: True
 
 # используем функцию calc_area() для получения площади любой фигуры
 print(calc_area(circle)) # Вывод: 78.54
