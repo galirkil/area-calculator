@@ -5,9 +5,8 @@ from area_calculator.figures import Circle, Triangle
 from area_calculator.utils import calc_area
 
 RADIUS = 3
-SIDE1 = 3
-SIDE2 = 4
-SIDE3 = 5
+SIDES = [3, 4, 5]
+INVALID_SIDES = [1, 2, 3]
 
 
 class TestCircle(unittest.TestCase):
@@ -35,35 +34,40 @@ class TestCircle(unittest.TestCase):
 
 class TestTriangleInit(unittest.TestCase):
     def test_init_with_one_argument(self):
-        triangle = Triangle(SIDE1)
-        self.assertEqual(triangle.side1, SIDE1)
-        self.assertEqual(triangle.side2, SIDE1)
-        self.assertEqual(triangle.side3, SIDE1)
+        triangle = Triangle(SIDES[0])
+        self.assertEqual(triangle.side1, SIDES[0])
+        self.assertEqual(triangle.side2, SIDES[0])
+        self.assertEqual(triangle.side3, SIDES[0])
 
     def test_init_with_three_arguments(self):
-        triangle = Triangle(SIDE1, SIDE2, SIDE3)
-        self.assertEqual(triangle.side1, SIDE1)
-        self.assertEqual(triangle.side2, SIDE2)
-        self.assertEqual(triangle.side3, SIDE3)
+        triangle = Triangle(*SIDES)
+        self.assertEqual(triangle.side1, SIDES[0])
+        self.assertEqual(triangle.side2, SIDES[1])
+        self.assertEqual(triangle.side3, SIDES[2])
 
     def test_init_with_two_arguments(self):
         with self.assertRaises(TypeError):
-            triangle = Triangle(SIDE1, SIDE2)
+            triangle = Triangle(SIDES[0], SIDES[1])
+
+    def test_init_invalid_triangle(self):
+        with self.assertRaises(ValueError):
+            triangle = Triangle(*INVALID_SIDES)
 
 
 class TestTriangle(unittest.TestCase):
     def setUp(self):
-        self.triangle = Triangle(SIDE1, SIDE2, SIDE3)
+        self.triangle = Triangle(*SIDES)
 
     def test_area_method(self):
-        p = (SIDE1 + SIDE2 + SIDE3) / 2
-        expected = round(sqrt(p * (p - SIDE1) * (p - SIDE2) * (p - SIDE3)), 2)
+        p = (SIDES[0] + SIDES[1] + SIDES[2]) / 2
+        expected = round(
+            sqrt(p * (p - SIDES[0]) * (p - SIDES[1]) * (p - SIDES[2])), 2)
         self.assertEqual(self.triangle.area(), expected)
 
     def test_side_getter(self):
-        self.assertEqual(self.triangle.side1, SIDE1)
-        self.assertEqual(self.triangle.side2, SIDE2)
-        self.assertEqual(self.triangle.side3, SIDE3)
+        self.assertEqual(self.triangle.side1, SIDES[0])
+        self.assertEqual(self.triangle.side2, SIDES[1])
+        self.assertEqual(self.triangle.side3, SIDES[2])
 
     def test_side_setter(self):
         self.triangle.side1 = 6
@@ -76,6 +80,10 @@ class TestTriangle(unittest.TestCase):
     def test_side_setter_invalid_value(self):
         with self.assertRaises(ValueError):
             self.triangle.side1 = -5
+
+    def test_side_setter_invalid_triangle(self):
+        with self.assertRaises(ValueError):
+            self.triangle.side1 += 20
 
     def test_is_right_triangle_true(self):
         self.assertEqual(self.triangle.is_right_triangle, True)
@@ -91,9 +99,10 @@ class TestCalcAreaFunc(unittest.TestCase):
         self.assertEqual(calc_area(circle), round(pi * RADIUS ** 2, 2))
 
     def test_for_triangle(self):
-        triangle = Triangle(SIDE1, SIDE2, SIDE3)
-        p = (SIDE1 + SIDE2 + SIDE3) / 2
-        expected = round(sqrt(p * (p - SIDE1) * (p - SIDE2) * (p - SIDE3)), 2)
+        triangle = Triangle(SIDES[0], SIDES[1], SIDES[2])
+        p = (SIDES[0] + SIDES[1] + SIDES[2]) / 2
+        expected = round(
+            sqrt(p * (p - SIDES[0]) * (p - SIDES[1]) * (p - SIDES[2])), 2)
         self.assertEqual(calc_area(triangle), expected)
 
     def test_for_unsupported_object_type(self):
