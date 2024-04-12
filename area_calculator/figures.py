@@ -15,18 +15,16 @@ class Figure(ABC):
 
 class FigureMeasurement:
     """
-    Descriptor class for attributes that represent figure's measurements.
+    Base descriptor class for attributes that represent figure's measurements.
 
     Checks if attribute is of acceptable type and value.
     """
 
     def __set_name__(self, owner, name):
-        self._name = name
+        self._name = "_" + name
 
     def __get__(self, instance, owner):
-        if instance is None:
-            return self
-        return instance.__dict__[self._name]
+        return getattr(instance, self._name, None)
 
     def __set__(self, instance, value):
         if not isinstance(value, (int, float)):
@@ -34,7 +32,26 @@ class FigureMeasurement:
         elif value <= 0:
             raise ValueError("Figure measurement must be positive!")
         else:
-            instance.__dict__[self._name] = value
+            setattr(instance, self._name, value)
+
+
+class TriangleSide(FigureMeasurement):
+    """
+    Descriptor class for attributes that represent triangle's sides.
+
+    Additional check whether a triangle with given sides can exist.
+    """
+    def __set__(self, instance, value):
+        if not isinstance(value, (int, float)):
+            raise TypeError("Only args of int or float type are accepted!")
+        elif value <= 0:
+            raise ValueError("Triangle side must be positive!")
+        else:
+            previous_value = getattr(instance, self._name, None)
+            setattr(instance, self._name, value)
+            if not instance.is_valid_triangle():
+                setattr(instance, self._name, previous_value)
+                raise ValueError("Triangle with these sides cannot exist!")
 
 
 class Circle(Figure):
@@ -63,9 +80,9 @@ class Triangle(Figure):
     figure in cm. If only one argument passed, all sides will be equal
     to that argument's value.
     """
-    side1 = FigureMeasurement()
-    side2 = FigureMeasurement()
-    side3 = FigureMeasurement()
+    side1 = TriangleSide()
+    side2 = TriangleSide()
+    side3 = TriangleSide()
 
     def __init__(self, *sides: int | float):
         if len(sides) == 1:
@@ -80,6 +97,16 @@ class Triangle(Figure):
     def __str__(self):
         return f"Triangle with sides {self.side1} cm, {self.side2} cm, " \
                f"{self.side3} cm."
+
+    def is_valid_triangle(self):
+        a = getattr(self, "side1")
+        b = getattr(self, "side2")
+        c = getattr(self, "side3")
+
+        if a and b and c:  # Checks if all sides are set
+            return (a + b > c) and (a + c > b) and (b + c > a)
+        else:
+            return True  # Returns True until all sides are set
 
     def area(self) -> float:
         p = (self.side1 + self.side2 + self.side3) / 2
